@@ -4,6 +4,7 @@ import br.com.waldir.userserviceapi.mapper.UserMapper;
 import br.com.waldir.userserviceapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import models.exceptions.ResourceNotFoundException;
+import models.requests.CreateUserRequest;
 import models.responses.UserResponse;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +24,9 @@ public class UserService {
                 )
         );
 
+    }
+
+    public void save(CreateUserRequest createUserRequest) {
+        userRepository.save(userMapper.fromRequest(createUserRequest));
     }
 }
