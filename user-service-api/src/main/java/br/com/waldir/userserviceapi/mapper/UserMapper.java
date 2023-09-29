@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 @Mapper(
         componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
@@ -19,4 +21,6 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     User fromRequest(final CreateUserRequest createUserRequest);
+
+    List<UserResponse> fromUserList(final List<User> userList);
 }
