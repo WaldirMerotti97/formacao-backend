@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static br.com.waldir.userserviceapi.creator.CreatorUtils.generateMock;
 import static ch.qos.logback.core.util.AggregationType.NOT_FOUND;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,7 +58,26 @@ class UserControllerImplTest {
                 .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()))
                 .andExpect(jsonPath("$.timestamp").isNotEmpty());
 
+    }
 
+    @Test
+    void testFindAllWithSuccess() throws Exception {
+        final var entity1 = generateMock(User.class);
+        final var entity2 = generateMock(User.class);
+
+        userRepository.saveAll(
+                List.of(entity1, entity2)
+        );
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0]").isNotEmpty())
+                .andExpect(jsonPath("$[1]").isNotEmpty())
+                .andExpect(jsonPath("$[0].profiles").isArray())
+                .andExpect(jsonPath("$[1].profiles").isArray());
+
+        userRepository.deleteAll(List.of(entity1, entity2));
     }
 
 }
