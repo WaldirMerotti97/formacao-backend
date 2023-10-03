@@ -42,7 +42,7 @@ public class UserService {
                 .filter(user -> !user.getId().equals(id))
                 .ifPresent(
                         user -> {
-                            throw new DataIntegrityViolationException("Email [ " + email + " ] already exists. ");
+                            throw new DataIntegrityViolationException("Email [ " + email + " ] already exists.");
                         }
                 );
     }
