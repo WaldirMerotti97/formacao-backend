@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static br.com.waldir.userserviceapi.creator.CreatorUtils.generateMock;
+import static ch.qos.logback.core.util.AggregationType.NOT_FOUND;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,5 +46,17 @@ class UserControllerImplTest {
         userRepository.deleteById(userId);
     }
 
+    @Test
+    void testFindByIdWithNotFoundException() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/users/{id}", "invalid-id"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Object not found. Id: invalid-id, Type UserResponse"))
+                .andExpect(jsonPath("$.error").value(HttpStatus.NOT_FOUND.getReasonPhrase()))
+                .andExpect(jsonPath("$.path").value("/api/users/invalid-id"))
+                .andExpect(jsonPath("$.status").value(HttpStatus.NOT_FOUND.value()))
+                .andExpect(jsonPath("$.timestamp").isNotEmpty());
+
+
+    }
 
 }
