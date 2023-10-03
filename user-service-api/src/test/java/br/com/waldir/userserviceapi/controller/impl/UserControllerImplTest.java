@@ -2,19 +2,23 @@ package br.com.waldir.userserviceapi.controller.impl;
 
 import br.com.waldir.userserviceapi.entity.User;
 import br.com.waldir.userserviceapi.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import models.requests.CreateUserRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 import static br.com.waldir.userserviceapi.creator.CreatorUtils.generateMock;
-import static ch.qos.logback.core.util.AggregationType.NOT_FOUND;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -78,6 +82,29 @@ class UserControllerImplTest {
                 .andExpect(jsonPath("$[1].profiles").isArray());
 
         userRepository.deleteAll(List.of(entity1, entity2));
+    }
+
+    @Test
+    void testSaveUserWithSuccess() throws Exception {
+        final var validEmail = "kajkdja4wdf@hotmail.com";
+        final var request = generateMock(CreateUserRequest.class).withEmail(validEmail);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(request))
+        ).andExpect(status().isCreated());
+
+        userRepository.deleteByEmail(validEmail);
+
+    }
+
+    private String toJson(final Object object) throws Exception {
+        try{
+            return new ObjectMapper().writeValueAsString(object);
+        } catch (Exception e) {
+            throw new Exception("Error to convert object to json", e);
+        }
     }
 
 }
