@@ -152,7 +152,8 @@ class UserControllerImplTest {
     @Test
     @DisplayName("Should throw a bad request exception when name is null")
     void testSaveUserWithNameNullThenThrowBadRequest() throws Exception{
-        final var request = generateMock(CreateUserRequest.class).withName(null).withEmail(VALID_EMAIL);
+        final var request = generateMock(CreateUserRequest.class).withName(null).withEmail
+                (VALID_EMAIL);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post(BASE_URI)
@@ -297,7 +298,7 @@ class UserControllerImplTest {
     @Test
     @DisplayName("Should throw a bad request exception when password has less than six characters")
     void testSaveUserWithPasswordContainingLessThenSixCharactersThenThrowBadRequest() throws Exception{
-        final var request = generateMock(CreateUserRequest.class).withEmail(VALID_EMAIL).withPassword("   ");
+        final var request = generateMock(CreateUserRequest.class).withEmail(VALID_EMAIL).withPassword("abcde");
 
         mockMvc.perform(
                         MockMvcRequestBuilders.post(BASE_URI)
@@ -328,7 +329,7 @@ class UserControllerImplTest {
                 .andExpect(jsonPath("$.path").value(BASE_URI + "/" + VALID_ID))
                 .andExpect(jsonPath("$.status").value(BAD_REQUEST.value()))
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
-                .andExpect(jsonPath("$.errors[?(@.fieldName=='name' && @.message=='Name must contain between 3 and 50 characters')]").exists());
+                .andExpect(jsonPath("$.errors[?(@.fieldName=='name' && @.message=='Name must contain between 6 and 50 characters')]").exists());
 
         userRepository.deleteById(VALID_ID);
     }
@@ -406,7 +407,7 @@ class UserControllerImplTest {
                                 .contentType(APPLICATION_JSON)
                                 .content(toJson(request))
                 ).andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("Object not found. Id: 1, Type: UserResponse"))
+                .andExpect(jsonPath("$.message").value("Object not found. Id: 1, Type UserResponse"))
                 .andExpect(jsonPath("$.error").value(NOT_FOUND.getReasonPhrase()))
                 .andExpect(jsonPath("$.path").value(BASE_URI + "/1"))
                 .andExpect(jsonPath("$.status").value(NOT_FOUND.value()))
