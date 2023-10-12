@@ -25,9 +25,9 @@ dependencies {
 //        because('Starter para integrar com o Spring Cloud Eureka Server')
 //    }
 
-//    implementation ('org.springframework.boot:spring-boot-starter-data-mongodb') {
-//        because('Starter para integrar com o MongoDB')
-//    }
+    implementation ('org.springframework.boot:spring-boot-starter-data-mongodb') {
+        because('Starter para integrar com o MongoDB')
+    }
 
     implementation ('org.springframework.boot:spring-boot-starter-validation') {
         because('Starter para validação de dados')
