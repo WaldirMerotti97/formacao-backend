@@ -1,5 +1,6 @@
-package br.com.waldir.authserviceapi.security.dtos;
+package br.com.waldir.authserviceapi.security;
 
+import br.com.waldir.authserviceapi.security.dtos.UserDetailsDTO;
 import br.com.waldir.authserviceapi.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -36,7 +37,7 @@ public class JWTAuthenticationImpl {
         final var token = jwtUtils.generateToken(detailsDTO);
 
         return AuthenticationResponse.builder()
-                .type("JWT")
+                .type("Bearer")
                 .token("Bearer " + token)
                 .build();
     }
