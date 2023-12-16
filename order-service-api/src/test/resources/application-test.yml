@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:demodb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    database-platform: org.hibernate.dialect.H2Dialect
