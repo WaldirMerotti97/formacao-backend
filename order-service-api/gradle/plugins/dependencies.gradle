@@ -34,7 +34,7 @@ dependencies {
     implementation 'br.com.waldir:hd-commons-lib:1.0.0'
 
     // Starter para integração com banco de dados
-    implementation 'com.h2database:h2'
+    //implementation 'com.h2database:h2'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
